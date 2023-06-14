@@ -1,0 +1,114 @@
+*{
+    padding: 0px 0px;
+    margin: 0px 0px;
+}
+header {
+    position: relative;
+    top: 0;
+    z-index: 900;
+}
+.banner_section {
+    width: 100%;
+    float: left;
+    background-image: url(banner-bg.png);
+    height: auto;
+    padding-bottom: 90px;
+    background-size: cover;
+}
+body {
+    background-color: rgb(162, 164, 162);
+    
+}
+.main{
+    position:relative;
+    background-color: rgb(226, 224, 227);
+    height: 500px;
+    width: 500px;
+    top: 50%;
+    left: 30%;
+    /*transform: translate(-50%,50%);
+    border: 5px solid rgb(15, 1, 15);*/
+    border-radius: 20px;
+}
+#longurl{
+    position: relative;
+    top: 40%;
+    left: 10%;
+    height: 40px;
+    width: 296px;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 20px;
+    font-size: large;
+    font-family: monospace;
+    font-weight: bold;
+}
+#shorten{
+    position: relative;
+    top: 40%;
+    left: 12%;
+    height: 40px;
+    width: 80px;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-size: large;
+    font-weight: bold;
+    font-family: monospace;
+    color: white;
+    background-color: rgb(59, 124, 68);
+}
+#shorten:hover{
+    background-color: rgb(156, 167, 171);
+}
+#shorturl{
+    position: relative;
+    top: 45%;
+    left: 10%;
+    height: 40px;
+    width: 270px;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 47px;
+    font-size: large;
+    font-family: monospace;
+    font-weight: bold;
+}
+#copy{
+    position: relative;
+    top: 46%;
+    left: 0%;
+    height: 35px;
+    width: 35px;
+    border: 2px solid black;
+    border-radius: 10px;
+    color: white;
+    background-color: rgb(60, 123, 82);
+}
+#copy:hover{
+    background-color: rgb(151, 159, 162);
+}
+.main p{
+    /* background-color: white; */
+    position: relative;
+    top: 30%;
+    left: 13%;
+    height: 60px;
+    width: 400px;
+    font-size: 50px;
+    font-family: monospace;
+    font-weight: bold;
+    color: rgb(17, 11, 11);
+}
+footer {
+    background-color: rgb(226, 224, 227);
+    padding: 10px 0;
+    text-align: center;
+}
+
+.copy-right p {
+    font-size: 14px;
+    color: rgb(100, 100, 100);
+}
+
