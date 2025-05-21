@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnipURL - URL Shortener</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0">
+    
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #6c757d;
+            --dark-color: #212529;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 1rem;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-brand span {
+            color: var(--dark-color);
+        }
+        
+        .nav-link {
+            color: var(--dark-color) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a56d4;
+            border-color: #3a56d4;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 3rem 0;
+        }
+        
+        .url-shortener-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 3rem;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .url-shortener-card h1 {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .url-shortener-card p.lead {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-control {
+            padding: 1rem;
+            border-radius: 8px !important;
+            border: 1px solid #e1e4e8;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(74, 107, 255, 0.25);
+        }
+        
+        .result-container {
+            display: none;
+            margin-top: 2rem;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-box {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .original-url {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+        
+        .short-url {
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 1.1rem;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .copy-btn:hover {
+            background-color: #3a56d4;
+        }
+        
+        .copy-btn.copied {
+            background-color: var(--success-color);
+        }
+        
+        .features-section {
+            margin-top: 3rem;
+            padding: 2rem 0;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            height: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-desc {
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+        }
+        
+        footer {
+            background-color: white;
+            padding: 1.5rem 0;
+            margin-top: auto;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .copyright-text {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .copyright-text a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .copyright-text a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .url-shortener-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .url-shortener-card h1 {
+                font-size: 1.8rem;
+            }
+            
+            .result-box {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-link me-2"></i>Snip<span>URL</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-star me-1"></i> Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-question-circle me-1"></i> Support</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+                    <a href="#" class="btn btn-primary"><i class="fas fa-user-plus me-1"></i> Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="container">
+            <div class="url-shortener-card">
+                <h1>Shorten Your Links</h1>
+                <p class="lead">Create short, memorable URLs in seconds. Perfect for social media, emails, and more.</p>
+                
+                <form id="urlForm">
+                    <div class="input-group mb-3">
+                        <input type="url" class="form-control" id="longurl" placeholder="Paste your long URL here" required>
+                        <button class="btn btn-primary" type="submit" id="shorten">
+                            <i class="fas fa-scissors me-1"></i> Shorten
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="resultContainer" class="result-container">
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle me-2"></i> Your shortened URL is ready!
+                    </div>
+                    
+                    <div class="result-box">
+                        <div>
+                            <div class="original-url" id="originalUrl"></div>
+                            <a href="#" class="short-url" id="shortUrl" target="_blank"></a>
+                        </div>
+                        <button class="copy-btn" id="copy">
+                            <i class="fas fa-copy me-1"></i> Copy
+                        </button>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center mt-3">
+                        <button class="btn btn-outline-primary me-2" id="newLink">
+                            <i class="fas fa-plus me-1"></i> Create Another
+                        </button>
+                        <a href="#" class="btn btn-primary" id="analyticsBtn">
+                            <i class="fas fa-chart-bar me-1"></i> View Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features-section">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h4 class="feature-title">Lightning Fast</h4>
+                            <p class="feature-desc">Our URL shortener delivers instant results with minimal latency for the best user experience.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4 class="feature-title">Secure Links</h4>
+                            <p class="feature-desc">All shortened URLs are scanned for malware and phishing attempts to keep you safe.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4 class="feature-title">Detailed Analytics</h4>
+                            <p class="feature-desc">Track clicks, geographic data, and referral sources for all your shortened links.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p class="copyright-text">
+                        © 2023 All rights reserved by <a href="https://www.linkedin.com/in/dpprasad/">Durga Prasad Ganta</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlForm = document.getElementById('urlForm');
+            const longUrlInput = document.getElementById('longurl');
+            const shortenBtn = document.getElementById('shorten');
+            const resultContainer = document.getElementById('resultContainer');
+            const originalUrl = document.getElementById('originalUrl');
+            const shortUrl = document.getElementById('shortUrl');
+            const copyBtn = document.getElementById('copy');
+            const newLinkBtn = document.getElementById('newLink');
+            const analyticsBtn = document.getElementById('analyticsBtn');
+            
+            // Mock URL shortening function (in a real app, this would call an API)
+            function shortenUrl(longUrl) {
+                // This is just a mock implementation
+                return `https://snip.url/${Math.random().toString(36).substring(2, 8)}`;
+            }
+            
+            urlForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const longUrl = longUrlInput.value.trim();
+                
+                if (!longUrl) {
+                    longUrlInput.focus();
+                    return;
+                }
+                
+                // Show loading state
+                shortenBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Shortening...';
+                shortenBtn.disabled = true;
+                
+                // Simulate API call delay
+                setTimeout(function() {
+                    // Generate short URL (in real app, this would come from your API)
+                    const shortenedUrl = shortenUrl(longUrl);
+                    
+                    // Display results
+                    originalUrl.textContent = longUrl;
+                    shortUrl.textContent = shortenedUrl;
+                    shortUrl.href = shortenedUrl;
+                    resultContainer.style.display = 'block';
+                    
+                    // Reset form
+                    shortenBtn.innerHTML = '<i class="fas fa-scissors me-1"></i> Shorten';
+                    shortenBtn.disabled = false;
+                    
+                    // Scroll to results
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 800);
+            });
+            
+            copyBtn.addEventListener('click', function() {
+                const urlToCopy = shortUrl.textContent;
+                navigator.clipboard.writeText(urlToCopy).then(function() {
+                    copyBtn.innerHTML = '<i class="fas fa-check me-1"></i> Copied!';
+                    copyBtn.classList.add('copied');
+                    
+                    setTimeout(function() {
+                        copyBtn.innerHTML = '<i class="fas fa-copy me-1"></i> Copy';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                });
+            });
+            
+            newLinkBtn.addEventListener('click', function() {
+                resultContainer.style.display = 'none';
+                longUrlInput.value = '';
+                longUrlInput.focus();
+            });
+            
+            // Analytics button would link to analytics page in a real app
+            analyticsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('In a complete application, this would take you to the analytics dashboard for this link.');
+            });
+        });
+    </script>
+</body>
+</html>
